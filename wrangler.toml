@@ -3,6 +3,16 @@ main = ".open-next/worker.js"
 compatibility_date = "2024-12-01"
 compatibility_flags = ["nodejs_compat"]
 
+# Cloudflare Workers Logs (observability) — streams logs to the Cloudflare
+# dashboard. Enable "Workers Logs" in the Cloudflare dashboard
+# (Workers & Pages → Logs) to see real-time logs from requests.
+[observability]
+enabled = true
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1.0
+
 [assets]
 directory = ".open-next/assets"
 binding = "ASSETS"
