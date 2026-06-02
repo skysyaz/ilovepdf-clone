@@ -5,10 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:cf": "next build && npx @cloudflare/next-on-pages",
+    "build:cf": "npx opennextjs-cloudflare build --dangerouslyUseUnsupportedNextVersion",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "npm run build:cf && wrangler pages deploy .vercel/output/static --project-name ilovepdf-clone --commit-dirty=true --branch main"
+    "deploy": "CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN} npx opennextjs-cloudflare deploy"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
