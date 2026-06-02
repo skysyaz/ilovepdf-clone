@@ -6,27 +6,26 @@ processing — no stubs.
 
 ## Tools
 
-| # | Tool        | UI route      | API route          |
-|---|-------------|---------------|--------------------|
-| 1 | Merge PDF   | `/merge`      | `/api/merge`       |
-| 2 | Split PDF   | `/split`      | `/api/split`       |
-| 3 | Compress    | `/compress`   | `/api/compress`    |
-| 4 | Rotate      | `/rotate`     | `/api/rotate`      |
-| 5 | JPG → PDF   | `/jpg-to-pdf` | `/api/jpg-to-pdf`  |
-| 6 | PDF → JPG   | `/pdf-to-jpg` | `/api/pdf-to-jpg`  |
-| 7 | Watermark   | `/watermark`  | `/api/watermark`   |
-| 8 | Protect     | `/protect`    | `/api/protect`     |
-| 9 | Unlock      | `/unlock`     | `/api/unlock`      |
-| 10| Organize    | `/organize`   | `/api/organize`    |
+| # | Tool        | UI route      | API route          | Runs on |
+|---|-------------|---------------|--------------------|---------|
+| 1 | Merge PDF   | `/merge`      | `/api/merge`       | Server (Worker) |
+| 2 | Split PDF   | `/split`      | `/api/split`       | Server (Worker) |
+| 3 | Compress    | `/compress`   | `/api/compress`    | Server (Worker) |
+| 4 | Rotate      | `/rotate`     | `/api/rotate`      | Server (Worker) |
+| 5 | JPG → PDF   | `/jpg-to-pdf` | `/api/jpg-to-pdf`  | Server (Worker) |
+| 6 | PDF → JPG   | `/pdf-to-jpg` | (no server route)  | **Browser (pdf.js)** |
+| 7 | Watermark   | `/watermark`  | `/api/watermark`   | Server (Worker) |
+| 8 | Protect     | `/protect`    | `/api/protect`     | Server (Worker) |
+| 9 | Unlock      | `/unlock`     | `/api/unlock`      | Server (Worker) |
+| 10| Organize    | `/organize`   | `/api/organize`    | Server (Worker) — thumbnails render in browser |
 
 ## Tech stack
 
 - **Next.js 14** App Router + **TypeScript** + **Tailwind CSS v3**
 - **pdf-lib** — merge, split, rotate, watermark, organize, JPG→PDF
-- **pdfjs-dist** — PDF→JPG (server) and organize thumbnails (client)
-- **sharp** — image normalization, JPEG encoding
-- **node-qpdf2** — password protect / unlock (uses the `qpdf` binary)
-- **canvas** — required by pdfjs-dist's Node build for pixel rendering
+- **pdfjs-dist** — PDF→JPG and Organize thumbnails (both render in the browser)
+- **@pdfsmaller/pdf-encrypt** + **@pdfsmaller/pdf-decrypt** — AES-256 protect/unlock
+  (pure JS / Web Crypto, no native binaries — works on any serverless host)
 - **react-dropzone** — drag-and-drop uploads
 - **@dnd-kit** — drag-to-reorder on the organize page
 - **jszip** + **file-saver** — multi-file downloads
@@ -65,8 +64,6 @@ Single PDF results return `application/pdf` with
 
 - pdf-lib's "compression" is a lossless re-save with stripped metadata and
   packed object streams; it does not re-encode embedded JPEGs/PNGs.
-- PDF→JPG uses pdfjs-dist's Node build with the `canvas` package as the
-  pixel backend.
-- Protect/Unlock rely on the `qpdf` binary being available
-  (`/usr/bin/qpdf` in this environment).
+- PDF→JPG renders every page in the browser with pdf.js — no server route.
+- Protect/Unlock use pure-JS Web Crypto (no `qpdf` binary required).
 - Files are processed in memory — nothing is written to long-term storage.

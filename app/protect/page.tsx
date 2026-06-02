@@ -26,8 +26,9 @@ export default function ProtectPage() {
             autoComplete="new-password"
           />
           <p className="text-xs text-gray-500">
-            Powered by qpdf with 256-bit AES encryption. The owner password
-            defaults to the same value.
+            AES-256 encryption via pure-JS Web Crypto (@pdfsmaller/pdf-encrypt)
+            — no native binaries needed, works on any serverless host. The owner
+            password defaults to the same value.
           </p>
         </div>
       }

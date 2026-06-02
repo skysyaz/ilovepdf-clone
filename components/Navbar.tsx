@@ -13,10 +13,7 @@ export default function Navbar() {
             <span className="text-ink">PDF</span>
           </span>
         </Link>
-        <nav className="hidden items-center gap-6 text-sm font-medium text-gray-600 md:flex">
-          <Link href="/" className="hover:text-brand">
-            All tools
-          </Link>
+        <nav className="hidden items-center gap-5 text-sm font-medium text-gray-600 lg:flex">
           <Link href="/merge" className="hover:text-brand">
             Merge
           </Link>
@@ -26,11 +23,26 @@ export default function Navbar() {
           <Link href="/compress" className="hover:text-brand">
             Compress
           </Link>
-          <Link
-            href="/protect"
-            className="rounded-lg bg-brand/10 px-3 py-1.5 text-brand hover:bg-brand/15"
-          >
-            Protect PDF
+          <Link href="/rotate" className="hover:text-brand">
+            Rotate
+          </Link>
+          <Link href="/jpg-to-pdf" className="hover:text-brand">
+            JPG&nbsp;→&nbsp;PDF
+          </Link>
+          <Link href="/pdf-to-jpg" className="hover:text-brand">
+            PDF&nbsp;→&nbsp;JPG
+          </Link>
+          <Link href="/watermark" className="hover:text-brand">
+            Watermark
+          </Link>
+          <Link href="/protect" className="hover:text-brand">
+            Protect
+          </Link>
+          <Link href="/unlock" className="hover:text-brand">
+            Unlock
+          </Link>
+          <Link href="/organize" className="hover:text-brand">
+            Organize
           </Link>
         </nav>
       </div>

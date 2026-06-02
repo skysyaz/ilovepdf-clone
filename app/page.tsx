@@ -45,9 +45,9 @@ const tools: Tool[] = [
   {
     href: "/pdf-to-jpg",
     title: "PDF to JPG",
-    description: "Extract all images contained in a PDF, or convert each page into a JPG.",
+    description: "Convert every page of your PDF into a high-quality JPG image. Renders in your browser — file never leaves your device.",
     icon: <img src="/icon-pdf-to-jpg.svg" alt="" className="h-7 w-7" />,
-    badge: "Server-rendered only",
+    badge: "In your browser",
   },
   {
     href: "/watermark",
@@ -61,7 +61,6 @@ const tools: Tool[] = [
     description: "Protect PDF files with a password. Encrypt PDF documents to prevent unauthorized access.",
     icon: <img src="/icon-protect.svg" alt="" className="h-7 w-7" />,
     accent: "bg-blue-50 text-blue-600",
-    badge: "Server-rendered only",
   },
   {
     href: "/unlock",
@@ -69,7 +68,6 @@ const tools: Tool[] = [
     description: "Remove PDF password security, giving you the freedom to use your PDFs.",
     icon: <img src="/icon-unlock.svg" alt="" className="h-7 w-7" />,
     accent: "bg-amber-50 text-amber-600",
-    badge: "Server-rendered only",
   },
   {
     href: "/organize",
@@ -87,9 +85,9 @@ export default function HomePage() {
           Every <span className="text-brand">PDF</span> tool you need
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
-          Merge, split, compress, convert, watermark and protect PDF files. All
-          tools run entirely in your browser — your files never leave the
-          server unencrypted.
+          Merge, split, compress, convert, watermark and protect PDF files.
+          Most tools process on our server in-memory and never store anything;
+          PDF to JPG and Organize render thumbnails directly in your browser.
         </p>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3 text-sm text-gray-500">
           <span className="rounded-full bg-white px-3 py-1 shadow-card">100% free</span>
@@ -124,8 +122,9 @@ export default function HomePage() {
           <div>
             <h3 className="text-lg font-semibold text-ink">Built for speed</h3>
             <p className="mt-2 text-sm text-gray-600">
-              All processing happens in a Node.js server using pdf-lib, pdfjs
-              and qpdf — no headless browser required.
+              Most tools run on a Cloudflare Worker using pdf-lib and pure-JS
+              Web Crypto for encryption. PDF to JPG and Organize thumbnails
+              render directly in your browser via pdf.js.
             </p>
           </div>
           <div>
@@ -139,10 +138,15 @@ export default function HomePage() {
       </section>
 
       <p className="mt-12 text-center text-sm text-gray-500">
-        Looking for the source?{" "}
-        <Link href="/" className="text-brand hover:underline">
-          See the README
-        </Link>
+        Open source on{" "}
+        <a
+          href="https://github.com/skysyaz/ilovepdf-clone"
+          target="_blank"
+          rel="noreferrer noopener"
+          className="text-brand hover:underline"
+        >
+          GitHub
+        </a>
         .
       </p>
     </div>

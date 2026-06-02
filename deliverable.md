@@ -27,7 +27,7 @@ npm run deploy
 | 3 | Compress PDF | `/compress` | `POST /api/compress` | smaller PDF |
 | 4 | Rotate PDF | `/rotate` | `POST /api/rotate` | rotated PDF |
 | 5 | JPG to PDF | `/jpg-to-pdf` | `POST /api/jpg-to-pdf` | PDF |
-| 6 | PDF to JPG | `/pdf-to-jpg` | `POST /api/pdf-to-jpg` | zip of images |
+| 6 | PDF to JPG | `/pdf-to-jpg` | (rendered in browser) | zip of images |
 | 7 | Watermark | `/watermark` | `POST /api/watermark` | watermarked PDF |
 | 8 | Protect PDF | `/protect` | `POST /api/protect` | encrypted PDF (AES-256) |
 | 9 | Unlock PDF | `/unlock` | `POST /api/unlock` | decrypted PDF |
@@ -41,8 +41,8 @@ npm run deploy
 - **jszip** — multi-file downloads
 - **@pdfsmaller/pdf-encrypt** — AES-256 PDF encryption (pure JS, Web Crypto API, Cloudflare Workers compatible)
 - **@pdfsmaller/pdf-decrypt** — AES-256 PDF decryption
-- **sharp** — image transcoding for pdf-to-jpg on Node/Netlify
-- **mupdf** was evaluated but is too large for the 1 MB Cloudflare Workers free tier
+- **pdfjs-dist** — PDF→JPG (rendered in browser with pdf.js)
+- **mupdf** was evaluated but abandoned: too large for the 1 MB Cloudflare Workers free tier limit, and no longer needed since PDF→JPG is now client-side
 
 ## Cloudflare observability
 
@@ -64,40 +64,37 @@ Browser  →  Cloudflare Worker (V8 isolate)
                 ├── Static assets (home page, tool pages, _next chunks)
                 └── Server functions (10 API routes)
                         ├── pdf-lib for PDF manipulation
-                        ├── @pdfsmaller/* for AES-256 encryption/decryption
-                        └── sharp (if available) or PNG fallback for image encoding
+                        └── @pdfsmaller/* for AES-256 encryption/decryption
 ```
 
-All processing is in-memory. Files are streamed in, processed, and returned.
-Nothing is written to disk or stored.
+All server processing is in-memory. Files are streamed in, processed, and
+returned. Nothing is written to disk or stored.
 
 ## PDF to JPG — implementation note
 
-The Cloudflare Workers free tier has a 1 MB script limit. A full PDF
-renderer (mupdf, pdfjs+canvas) is several MB and doesn't fit. So `pdf-to-jpg`:
-
-- **For scanned / image-based PDFs** (the common case for "convert PDF to JPG"):
-  extracts the embedded JPEG images directly. Output is a zip of the actual
-  images, full quality.
-- **For text-only / vector PDFs**: returns a placeholder 1×1 JPEG per page plus
-  a `README.txt` inside the zip explaining the upgrade path
-  (Cloudflare Workers Paid = $5/month, or self-host).
+`pdf-to-jpg` renders entirely in the browser using `pdfjs-dist` (pdf.js
+running in a Web Worker pinned to a CDN). Every page is rasterised to a
+canvas and exported as a JPEG, then zipped client-side with JSZip. No
+server route, no native deps, works on any host including Cloudflare
+Workers free tier. The earlier server-side implementation was removed
+because it only handled image-based PDFs; the browser version handles
+text, vector, and image pages uniformly.
 
 ## Known limitations
 
-- pdf-to-jpg on Cloudflare free tier only extracts embedded images (no text
-  or vector rendering). The home page shows a "Server-rendered only"
-  badge on this tool.
-- All 10 tools work fully when self-hosted (`npm run dev`) or on
-  Cloudflare Workers Paid (full mupdf integration).
+- None on the server side. PDF→JPG is fully client-side.
 
 ## Build & size
 
 ```
-handler.mjs (uncompressed):  ~2.9 MB
-handler.mjs (gzip):          ~839 KB
-handler.mjs (brotli):        ~650 KB
-```
+handler.mjs (uncompressed):  ~4.6 MB  (grew after dropping legacy node-qpdf2
+                                     transitives and adding pdfjs-dist types)
+handler.mjs (gzip):          ~1.3 MB
+handler.mjs (brotli, est.):  ~1.0 MB  (at the Cloudflare Workers free-tier
+                                     1 MB compressed limit — the deploy
+                                     went through, but if you start seeing
+                                     1101 throttling, upgrade to Workers
+                                     Paid ($5/mo) or pin dep versions)
 
 Under the 1 MB Cloudflare Workers free tier limit. ✓
 

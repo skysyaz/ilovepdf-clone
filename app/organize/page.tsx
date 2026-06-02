@@ -30,13 +30,12 @@ export default function OrganizePage() {
     (async () => {
       try {
         const pdfjs = await import("pdfjs-dist");
-        // Use the bundled worker via the modern build.
-        // @ts-ignore — accept the version-specific worker.
-        pdfjs.GlobalWorkerOptions.workerSrc = await import(
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          "pdfjs-dist/build/pdf.worker.min.mjs?url"
-        ).then((m) => m.default);
+        // Point pdf.js at a pinned CDN copy of the worker that exactly
+        // matches our installed pdfjs-dist version. The previous '?url'
+        // dynamic-import trick returned the wrong type for workerSrc at
+        // runtime ("Invalid `workerSrc` type.").
+        pdfjs.GlobalWorkerOptions.workerSrc =
+          "https://cdn.jsdelivr.net/npm/pdfjs-dist@6.0.227/build/pdf.worker.min.mjs";
 
         const buffer = await file.arrayBuffer();
         const loadingTask = pdfjs.getDocument({ data: new Uint8Array(buffer) });
