@@ -1,7 +1,7 @@
 {
   "app": {
     "name": "iLovePDF Clone",
-    "tagline": "Setiap alat {tool} yang anda perlukan di satu tempat",
+    "tagline": "Setiap alat PDF yang anda perlukan di satu tempat",
     "description": "Gabung, pecah, mampat, tukar, tera air, lindungi dan buka kunci fail PDF — pantas, percuma, dan mudah digunakan."
   },
   "nav": {
@@ -22,7 +22,9 @@
   },
   "home": {
     "hero": {
-      "title": "Setiap alat PDF yang anda perlukan",
+      "titleStart": "Setiap alat ",
+      "titleHighlight": "PDF",
+      "titleEnd": " yang anda perlukan",
       "subtitle": "Gabung, pecah, mampat, tukar, tera air dan lindungi fail PDF. Kebanyakan alat memproses pada pelayan kami dalam ingatan dan tidak menyimpan apa-apa; PDF ke JPG dan Susun render terus dalam pelayar anda."
     },
     "cards": {

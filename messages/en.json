@@ -1,7 +1,7 @@
 {
   "app": {
     "name": "iLovePDF Clone",
-    "tagline": "Every {tool} tool you need in one place",
+    "tagline": "Every PDF tool you need in one place",
     "description": "Merge, split, compress, convert, watermark, protect and unlock PDF files — fast, free, and easy to use."
   },
   "nav": {
@@ -22,7 +22,9 @@
   },
   "home": {
     "hero": {
-      "title": "Every {tool} tool you need",
+      "titleStart": "Every ",
+      "titleHighlight": "PDF",
+      "titleEnd": " tool you need",
       "subtitle": "Merge, split, compress, convert, watermark and protect PDF files. Most tools process on our server in-memory and never store anything; PDF to JPG and Organize render thumbnails directly in your browser."
     },
     "cards": {

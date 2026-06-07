@@ -125,7 +125,9 @@ export default async function HomePage({ params }: { params: { locale: string } 
     <div className="mx-auto max-w-6xl px-4 py-12">
       <section className="mb-12 text-center">
         <h1 className="text-4xl font-bold tracking-tight text-ink dark:text-ink-dark sm:text-5xl">
-          {t("hero.title")}
+          {t("hero.titleStart")}
+          <span className="text-brand">{t("hero.titleHighlight")}</span>
+          {t("hero.titleEnd")}
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600 dark:text-gray-400">
           {t("hero.subtitle")}
