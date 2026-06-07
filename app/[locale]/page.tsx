@@ -178,18 +178,7 @@ export default async function HomePage({ params }: { params: { locale: string } 
         </div>
       </section>
 
-      <p className="mt-12 text-center text-sm text-gray-500">
-        Open source on{" "}
-        <a
-          href="https://github.com/skysyaz/ilovepdf-clone"
-          target="_blank"
-          rel="noreferrer noopener"
-          className="text-brand hover:underline"
-        >
-          GitHub
-        </a>
-        .
-      </p>
+
     </div>
   );
 }

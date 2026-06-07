@@ -88,8 +88,7 @@
     "openPdfToJpg": "Open PDF to JPG (works offline)"
   },
   "footer": {
-    "built": "Built with Next.js 14, pdf-lib, pdfjs-dist and @pdfsmaller/pdf-encrypt. For demonstration only — files are processed in-memory and never stored.",
-    "source": "Open source on {link}."
+    "version": "v{version}"
   },
   "languages": {
     "en": "English",

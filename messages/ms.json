@@ -88,8 +88,7 @@
     "openPdfToJpg": "Buka PDF ke JPG (berfungsi di luar talian)"
   },
   "footer": {
-    "built": "Dibina dengan Next.js 14, pdf-lib, pdfjs-dist dan @pdfsmaller/pdf-encrypt. Untuk demonstrasi sahaja — fail diproses dalam ingatan dan tidak pernah disimpan.",
-    "source": "Sumber terbuka di {link}."
+    "version": "v{version}"
   },
   "languages": {
     "en": "English",

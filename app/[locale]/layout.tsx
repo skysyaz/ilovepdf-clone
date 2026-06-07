@@ -82,9 +82,7 @@ export default async function RootLayout({
             <footer className="border-t border-gray-200 bg-white py-8 dark:border-gray-800 dark:bg-surface-dark">
               <div className="mx-auto max-w-6xl px-4 text-center text-sm text-gray-500 dark:text-gray-400">
                 <p>
-                  Built with Next.js 14, pdf-lib, pdfjs-dist and
-                  @pdfsmaller/pdf-encrypt. For demonstration only — files are
-                  processed in-memory and never stored.
+                  v{require("../../package.json").version}
                 </p>
               </div>
             </footer>
