@@ -1,0 +1,98 @@
+{
+  "app": {
+    "name": "iLovePDF Clone",
+    "tagline": "Every {tool} tool you need in one place",
+    "description": "Merge, split, compress, convert, watermark, protect and unlock PDF files — fast, free, and easy to use."
+  },
+  "nav": {
+    "home": "Home",
+    "merge": "Merge",
+    "split": "Split",
+    "compress": "Compress",
+    "rotate": "Rotate",
+    "jpgToPdf": "JPG → PDF",
+    "pdfToJpg": "PDF → JPG",
+    "watermark": "Watermark",
+    "protect": "Protect",
+    "unlock": "Unlock",
+    "organize": "Organize",
+    "chat": "Chat",
+    "install": "Install",
+    "theme": "Theme"
+  },
+  "home": {
+    "hero": {
+      "title": "Every {tool} tool you need",
+      "subtitle": "Merge, split, compress, convert, watermark and protect PDF files. Most tools process on our server in-memory and never store anything; PDF to JPG and Organize render thumbnails directly in your browser."
+    },
+    "cards": {
+      "merge": "Combine PDFs in the order you want with the easiest PDF merger available.",
+      "split": "Separate one page or a whole set for easy conversion into independent PDF files.",
+      "compress": "Reduce file size while optimizing for maximal PDF quality.",
+      "rotate": "Rotate your PDFs the way you need them — by 90, 180 or 270 degrees.",
+      "jpgToPdf": "Convert JPG images to PDF in seconds. Easily adjust orientation and margins.",
+      "pdfToJpg": "Convert every page of your PDF into a high-quality JPG image. Renders in your browser — file never leaves your device.",
+      "watermark": "Stamp an image or text over your PDF in seconds — choose typography, transparency and rotation.",
+      "protect": "Protect PDF files with a password. Encrypt PDF documents to prevent unauthorized access.",
+      "unlock": "Remove PDF password security, giving you the freedom to use your PDFs.",
+      "organize": "Sort pages of your PDF file however you like. Delete PDF pages or add PDF pages."
+    },
+    "badges": {
+      "inBrowser": "In your browser"
+    },
+    "howItWorks": {
+      "title": "How it works",
+      "body": "Pick a tool above, drop in your files, and we'll process them in seconds."
+    },
+    "built": {
+      "title": "Built for speed",
+      "body": "Most tools run on a Cloudflare Worker using pdf-lib and pure-JS Web Crypto for encryption. PDF to JPG and Organize thumbnails render directly in your browser via pdf.js."
+    },
+    "private": {
+      "title": "Privacy first",
+      "body": "Files are streamed into memory, processed, and immediately returned. Nothing is written to disk or stored."
+    }
+  },
+  "common": {
+    "dropFiles": "Drag & drop files here, or click to browse",
+    "selectFiles": "Select files",
+    "processing": "Processing…",
+    "download": "Download result",
+    "open": "Open tool",
+    "tryAgain": "Try again",
+    "cancel": "Cancel",
+    "clear": "Clear"
+  },
+  "chat": {
+    "title": "Chat with your PDF",
+    "subtitle": "Tell me what you want to do. I'll match you to the right tool.",
+    "placeholder": "e.g. merge these 3 files, add a Confidential watermark, extract the text…",
+    "examples": "Try:",
+    "examplesList": [
+      "Split this PDF into single pages",
+      "Merge these 3 files",
+      "Add a 'Confidential' watermark",
+      "Extract the text from this PDF",
+      "Compress this PDF",
+      "Add a password to this PDF"
+    ],
+    "matched": "Matched",
+    "noMatch": "I couldn't match that to a tool. Try one of the examples below.",
+    "comingSoon": "Coming soon — needs an AI backend to do this one.",
+    "openTool": "Open tool"
+  },
+  "offline": {
+    "title": "You're offline",
+    "body": "We couldn't reach the network and we don't have this page cached. The good news: PDF to JPG and Organize render entirely in your browser, so those still work without a connection.",
+    "goHome": "Go home",
+    "openPdfToJpg": "Open PDF to JPG (works offline)"
+  },
+  "footer": {
+    "built": "Built with Next.js 14, pdf-lib, pdfjs-dist and @pdfsmaller/pdf-encrypt. For demonstration only — files are processed in-memory and never stored.",
+    "source": "Open source on {link}."
+  },
+  "languages": {
+    "en": "English",
+    "ms": "Bahasa Melayu"
+  }
+}

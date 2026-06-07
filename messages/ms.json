@@ -1,0 +1,98 @@
+{
+  "app": {
+    "name": "iLovePDF Clone",
+    "tagline": "Setiap alat {tool} yang anda perlukan di satu tempat",
+    "description": "Gabung, pecah, mampat, tukar, tera air, lindungi dan buka kunci fail PDF — pantas, percuma, dan mudah digunakan."
+  },
+  "nav": {
+    "home": "Utama",
+    "merge": "Gabung",
+    "split": "Pecah",
+    "compress": "Mampat",
+    "rotate": "Putar",
+    "jpgToPdf": "JPG → PDF",
+    "pdfToJpg": "PDF → JPG",
+    "watermark": "Tera Air",
+    "protect": "Lindungi",
+    "unlock": "Buka Kunci",
+    "organize": "Susun",
+    "chat": "Sembang",
+    "install": "Pasang",
+    "theme": "Tema"
+  },
+  "home": {
+    "hero": {
+      "title": "Setiap alat PDF yang anda perlukan",
+      "subtitle": "Gabung, pecah, mampat, tukar, tera air dan lindungi fail PDF. Kebanyakan alat memproses pada pelayan kami dalam ingatan dan tidak menyimpan apa-apa; PDF ke JPG dan Susun render terus dalam pelayar anda."
+    },
+    "cards": {
+      "merge": "Gabungkan PDF dalam urutan yang anda mahu dengan penggabung PDF yang paling mudah.",
+      "split": "Pisahkan satu halaman atau set keseluruhan kepada fail PDF bebas.",
+      "compress": "Kurangkan saiz fail sambil mengoptimumkan kualiti PDF maksimum.",
+      "rotate": "Putar PDF anda seperti yang anda perlukan — 90, 180 atau 270 darjah.",
+      "jpgToPdf": "Tukar imej JPG kepada PDF dalam beberapa saat. Laraskan orientasi dan margin dengan mudah.",
+      "pdfToJpg": "Tukar setiap halaman PDF anda kepada imej JPG berkualiti tinggi. Render dalam pelayar — fail tidak meninggalkan peranti anda.",
+      "watermark": "Tera imej atau teks pada PDF anda dalam beberapa saat — pilih tipografi, ketelusan dan putaran.",
+      "protect": "Lindungi fail PDF dengan kata laluan. Sulitkan dokumen PDF untuk mencegah akses tanpa kebenaran.",
+      "unlock": "Buang keselamatan kata laluan PDF, memberikan anda kebebasan untuk menggunakan PDF anda.",
+      "organize": "Susun halaman fail PDF anda mengikut kehendak. Padam halaman PDF atau tambah halaman PDF."
+    },
+    "badges": {
+      "inBrowser": "Dalam pelayar"
+    },
+    "howItWorks": {
+      "title": "Bagaimana ia berfungsi",
+      "body": "Pilih alat di atas, jatuhkan fail anda, dan kami akan memprosesnya dalam beberapa saat."
+    },
+    "built": {
+      "title": "Dibina untuk kelajuan",
+      "body": "Kebanyakan alat berjalan pada Cloudflare Worker menggunakan pdf-lib dan Web Crypto JS tulen untuk penyulitan. PDF ke JPG dan Susun render terus dalam pelayar anda melalui pdf.js."
+    },
+    "private": {
+      "title": "Privasi didahulukan",
+      "body": "Fail distrim ke dalam ingatan, diproses, dan segera dipulangkan. Tiada apa-apa yang ditulis ke cakera atau disimpan."
+    }
+  },
+  "common": {
+    "dropFiles": "Seret & lepas fail di sini, atau klik untuk melayari",
+    "selectFiles": "Pilih fail",
+    "processing": "Memproses…",
+    "download": "Muat turun hasil",
+    "open": "Buka alat",
+    "tryAgain": "Cuba lagi",
+    "cancel": "Batal",
+    "clear": "Kosongkan"
+  },
+  "chat": {
+    "title": "Sembang dengan PDF anda",
+    "subtitle": "Beritahu saya apa yang anda mahu lakukan. Saya akan padankan anda dengan alat yang betul.",
+    "placeholder": "cth. gabung 3 fail ini, tambah tera air 'Sulit', ekstrak teks…",
+    "examples": "Cuba:",
+    "examplesList": [
+      "Pecah PDF ini kepada halaman tunggal",
+      "Gabungkan 3 fail ini",
+      "Tambah tera air 'Sulit'",
+      "Ekstrak teks dari PDF ini",
+      "Mampatkan PDF ini",
+      "Tambah kata laluan pada PDF ini"
+    ],
+    "matched": "Dipadankan",
+    "noMatch": "Saya tidak dapat memadankan itu dengan alat. Cuba salah satu contoh di bawah.",
+    "comingSoon": "Akan datang — memerlukan bahagian belakang AI untuk melakukan ini.",
+    "openTool": "Buka alat"
+  },
+  "offline": {
+    "title": "Anda di luar talian",
+    "body": "Kami tidak dapat mencapai rangkaian dan kami tidak mempunyai halaman ini dalam cache. Berita baik: PDF ke JPG dan Susun render sepenuhnya dalam pelayar anda, jadi ia masih berfungsi tanpa sambungan.",
+    "goHome": "Pergi ke utama",
+    "openPdfToJpg": "Buka PDF ke JPG (berfungsi di luar talian)"
+  },
+  "footer": {
+    "built": "Dibina dengan Next.js 14, pdf-lib, pdfjs-dist dan @pdfsmaller/pdf-encrypt. Untuk demonstrasi sahaja — fail diproses dalam ingatan dan tidak pernah disimpan.",
+    "source": "Sumber terbuka di {link}."
+  },
+  "languages": {
+    "en": "English",
+    "ms": "Bahasa Melayu"
+  }
+}

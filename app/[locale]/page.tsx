@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import ToolCard from "@/components/ToolCard";
 import type { ReactNode } from "react";
 
@@ -75,19 +76,59 @@ const tools: Tool[] = [
     description: "Sort pages of your PDF file however you like. Delete PDF pages or add PDF pages.",
     icon: <img src="/icon-organize.svg" alt="" className="h-7 w-7" />,
   },
+  {
+    href: "/flatten",
+    title: "Flatten PDF Form",
+    description: "Bake every form field into static page content. Locks the form so it can no longer be filled in.",
+    icon: (
+      <svg className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+        <rect x="4" y="3" width="16" height="18" rx="2" />
+        <path d="M8 8h8M8 12h8M8 16h5" />
+      </svg>
+    ),
+    accent: "bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-300",
+  },
+  {
+    href: "/extract-text",
+    title: "Extract Text",
+    description: "Pull every word out of your PDF and download it as a .txt file. Runs entirely in your browser.",
+    icon: (
+      <svg className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+        <line x1="9" y1="13" x2="15" y2="13" />
+        <line x1="9" y1="17" x2="15" y2="17" />
+      </svg>
+    ),
+    accent: "bg-violet-50 text-violet-600 dark:bg-violet-900/30 dark:text-violet-300",
+    badge: "In your browser",
+  },
+  {
+    href: "/chat",
+    title: "Chat with your PDF",
+    description: "Tell me what you want to do in plain English — “merge these 3 files”, “add a Confidential watermark”, “extract the text”.",
+    icon: (
+      <svg className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+      </svg>
+    ),
+    accent: "bg-pink-50 text-pink-600 dark:bg-pink-900/30 dark:text-pink-300",
+    badge: "New",
+  },
 ];
 
-export default function HomePage() {
+export default async function HomePage({ params }: { params: { locale: string } }) {
+  setRequestLocale(params.locale);
+  const t = await getTranslations("home");
+  const tApp = await getTranslations("app");
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
       <section className="mb-12 text-center">
-        <h1 className="text-4xl font-bold tracking-tight text-ink sm:text-5xl">
-          Every <span className="text-brand">PDF</span> tool you need
+        <h1 className="text-4xl font-bold tracking-tight text-ink dark:text-ink-dark sm:text-5xl">
+          {t("hero.title")}
         </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
-          Merge, split, compress, convert, watermark and protect PDF files.
-          Most tools process on our server in-memory and never store anything;
-          PDF to JPG and Organize render thumbnails directly in your browser.
+        <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600 dark:text-gray-400">
+          {t("hero.subtitle")}
         </p>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3 text-sm text-gray-500">
           <span className="rounded-full bg-white px-3 py-1 shadow-card">100% free</span>

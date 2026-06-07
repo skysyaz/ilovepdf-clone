@@ -5,6 +5,13 @@
 :root {
   --background: #f9fafb;
   --foreground: #1f2937;
+  color-scheme: light;
+}
+
+html.dark {
+  --background: #0b1220;
+  --foreground: #f9fafb;
+  color-scheme: dark;
 }
 
 html,
@@ -30,11 +37,11 @@ body {
 }
 
 .btn-primary:disabled {
-  @apply cursor-not-allowed bg-gray-300 text-gray-500 shadow-none;
+  @apply cursor-not-allowed bg-gray-300 text-gray-500 shadow-none dark:bg-gray-700 dark:text-gray-400;
 }
 
 .btn-ghost {
-  @apply inline-flex items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-ink transition;
+  @apply inline-flex items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-ink transition dark:border-gray-700 dark:bg-surface-dark dark:text-ink-dark;
 }
 
 .btn-ghost:hover {
@@ -44,7 +51,7 @@ body {
 .input,
 .select,
 .textarea {
-  @apply w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-ink outline-none transition;
+  @apply w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-ink outline-none transition dark:border-gray-700 dark:bg-surface-dark dark:text-ink-dark;
 }
 
 .input:focus,
@@ -54,13 +61,13 @@ body {
 }
 
 .card {
-  @apply rounded-2xl bg-white shadow-card;
+  @apply rounded-2xl bg-white shadow-card dark:bg-surface-dark dark:shadow-none dark:ring-1 dark:ring-gray-800;
 }
 
 .label {
-  @apply mb-1 block text-sm font-medium text-gray-700;
+  @apply mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300;
 }
 
 .kbd {
-  @apply rounded border border-gray-200 bg-gray-50 px-1.5 py-0.5 text-xs text-gray-500;
+  @apply rounded border border-gray-200 bg-gray-50 px-1.5 py-0.5 text-xs text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400;
 }
