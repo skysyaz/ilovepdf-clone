@@ -37,8 +37,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F9FAFB" },
-    { media: "(prefers-color-scheme: dark)", color: "#0B1220" },
+    { media: "(prefers-color-scheme: light)", color: "#F6F7FB" },
+    { media: "(prefers-color-scheme: dark)", color: "#070B16" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -63,29 +63,32 @@ export default async function RootLayout({
   setRequestLocale(locale);
 
   const messages = await getMessages();
+  const version = (await import("../../package.json")).version;
 
   return (
     <html lang={locale} className={inter.variable} suppressHydrationWarning>
       <head>
-        {/* Set theme class before React mounts to avoid a light-mode flash
-            on dark-mode visitors. */}
+        {/* Set theme class before React mounts to avoid a light-mode flash. */}
         <script
           dangerouslySetInnerHTML={{ __html: themeInitScript }}
         />
       </head>
-      <body className="min-h-screen bg-canvas text-ink antialiased dark:bg-canvas-dark dark:text-ink-dark">
+      <body className="text-ink antialiased dark:text-ink-dark">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ThemeProvider>
-            <Navbar />
-            <main>{children}</main>
+            <div className="app-shell">
+              <Navbar />
+              <main className="app-main">{children}</main>
+              <footer className="glass-soft z-10 flex items-center justify-center gap-3 border-t border-white/10 px-4 py-2 text-[11px] text-gray-500 dark:text-gray-400">
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px] shadow-emerald-400/60" />
+                  In-memory · nothing stored
+                </span>
+                <span className="opacity-40">•</span>
+                <span>v{version}</span>
+              </footer>
+            </div>
             <ChatBubble />
-            <footer className="border-t border-gray-200 bg-white py-8 dark:border-gray-800 dark:bg-surface-dark">
-              <div className="mx-auto max-w-6xl px-4 text-center text-sm text-gray-500 dark:text-gray-400">
-                <p>
-                  v{require("../../package.json").version}
-                </p>
-              </div>
-            </footer>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

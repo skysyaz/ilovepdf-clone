@@ -1,9 +1,11 @@
 /* iLovePDF Clone — Service Worker
- * Hand-rolled, tiny (~2 KB). Caches the app shell so the site loads
- * offline and speeds up repeat visits. Network-first for /api/* and
- * /_next/*, cache-first for static assets.
+ * Caches the app shell so the site loads offline and repeat visits are fast.
+ * Network-first for HTML + /api/*, cache-first for static assets + the
+ * self-hosted pdf.js worker.
+ *
+ * Bump CACHE_VERSION when you ship breaking changes so old caches evict.
  */
-const CACHE_VERSION = "ilovepdf-v1";
+const CACHE_VERSION = "ilovepdf-v2";
 const SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -19,19 +21,25 @@ const SHELL_URLS = [
   "/protect",
   "/unlock",
   "/organize",
+  "/flatten",
+  "/extract-text",
   "/chat",
+  "/offline",
   "/manifest.webmanifest",
   "/icons/icon-192.png",
   "/icons/icon-512.png",
-  "/offline",
+  // Self-hosted pdf.js worker — precache so the in-browser tools work offline.
+  "/pdf.worker.min.mjs",
 ];
 
 self.addEventListener("install", (event) => {
+  // Cache each URL independently so one 404 doesn't nuke the whole shell.
   event.waitUntil(
-    caches
-      .open(SHELL_CACHE)
-      .then((cache) => cache.addAll(SHELL_URLS).catch(() => {}))
-      .then(() => self.skipWaiting())
+    (async () => {
+      const cache = await caches.open(SHELL_CACHE);
+      await Promise.allSettled(SHELL_URLS.map((u) => cache.add(u)));
+      await self.skipWaiting();
+    })()
   );
 });
 
@@ -56,8 +64,7 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
 
-  // Never cache API responses — they're per-request and may contain
-  // user data.
+  // Never cache API responses — they're per-request and may carry user data.
   if (url.pathname.startsWith("/api/")) {
     event.respondWith(
       fetch(req).catch(
@@ -89,7 +96,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Cache-first for everything else (static assets, _next chunks, images).
+  // Cache-first for everything else (static assets, _next chunks, images, worker).
   event.respondWith(
     caches.match(req).then(
       (cached) =>

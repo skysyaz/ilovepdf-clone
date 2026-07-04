@@ -1,28 +1,20 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { protectPdf } from "@/lib/pdf-tools/protect";
+import { readPdfBuffers, jsonError } from "@/lib/validate";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
     const form = await req.formData();
-    const file = form.get("files");
-    if (!(file instanceof File)) {
-      return NextResponse.json(
-        { error: "A single PDF file is required." },
-        { status: 400 }
-      );
-    }
     const password = form.get("password")?.toString() || "";
     if (!password) {
-      return NextResponse.json(
-        { error: "A password is required to protect the PDF." },
-        { status: 400 }
-      );
+      return jsonError("A password is required to protect the PDF.", 400);
     }
-    const buffer = new Uint8Array(await file.arrayBuffer());
-    const result = await protectPdf(buffer, { password });
+    const upload = await readPdfBuffers(form, { min: 1, maxFiles: 1 });
+    if (!upload.ok) return jsonError(upload.error, upload.status);
+    const result = await protectPdf(upload.buffers[0], { password });
     return new NextResponse(Buffer.from(result.bytes), {
       status: 200,
       headers: {

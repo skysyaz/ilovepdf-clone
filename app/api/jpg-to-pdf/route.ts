@@ -1,20 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { imagesToPdf } from "@/lib/pdf-tools/jpg-to-pdf";
+import { readImageFiles, jsonError } from "@/lib/validate";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
     const form = await req.formData();
-    const files = form.getAll("files").filter((f): f is File => f instanceof File);
-    if (!files.length) {
-      return NextResponse.json(
-        { error: "At least one image is required." },
-        { status: 400 }
-      );
-    }
-    const result = await imagesToPdf(files);
+    const upload = await readImageFiles(form, { min: 1, maxFiles: 50 });
+    if (!upload.ok) return jsonError(upload.error, upload.status);
+    const result = await imagesToPdf(upload.files);
     return new NextResponse(Buffer.from(result.bytes), {
       status: 200,
       headers: {

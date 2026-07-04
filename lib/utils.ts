@@ -9,22 +9,6 @@ export function formatBytes(bytes: number): string {
   return `${value.toFixed(value >= 10 || i === 0 ? 0 : 1)} ${units[i]}`;
 }
 
-// PDF magic number: "%PDF-"
-export const PDF_MAGIC = Buffer.from("%PDF-", "ascii");
-
-export function isLikelyPdf(buffer: ArrayBuffer | Uint8Array | Buffer): boolean {
-  let view: Buffer;
-  if (buffer instanceof Buffer) {
-    view = buffer;
-  } else if (buffer instanceof Uint8Array) {
-    view = Buffer.from(buffer);
-  } else {
-    view = Buffer.from(new Uint8Array(buffer));
-  }
-  if (view.length < 5) return false;
-  return view.subarray(0, 5).equals(PDF_MAGIC);
-}
-
 // Parse a page list like "1-3,5,7-9" into a 1-based sorted, deduped list of pages.
 export function parsePageList(input: string, totalPages: number): number[] {
   const trimmed = (input || "").trim();
@@ -67,16 +51,4 @@ export function splitRanges(pageList: number[]): Array<[number, number]> {
   }
   ranges.push([start, prev]);
   return ranges;
-}
-
-// Filename helpers — sanitize user input and ensure .pdf / .zip etc.
-export function ensureExt(name: string, ext: string): string {
-  const base = (name || "result").replace(/\.[^./\\]+$/, "");
-  const cleanExt = ext.startsWith(".") ? ext : `.${ext}`;
-  return `${base}${cleanExt}`;
-}
-
-// Multi-value form-data getter. Returns an array even when there is one value.
-export function getFormFiles(form: FormData): File[] {
-  return form.getAll("files").filter((f): f is File => f instanceof File);
 }

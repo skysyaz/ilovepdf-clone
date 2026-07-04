@@ -1,29 +1,21 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { splitPdf } from "@/lib/pdf-tools/split";
+import { readPdfBuffers, jsonError } from "@/lib/validate";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
     const form = await req.formData();
-    const file = form.get("files");
-    if (!(file instanceof File)) {
-      return NextResponse.json(
-        { error: "A single PDF file is required." },
-        { status: 400 }
-      );
-    }
     const mode = (form.get("mode")?.toString() || "single") as "pages" | "single";
     if (mode !== "pages" && mode !== "single") {
-      return NextResponse.json(
-        { error: "mode must be 'pages' or 'single'." },
-        { status: 400 }
-      );
+      return jsonError("mode must be 'pages' or 'single'.", 400);
     }
     const pages = form.get("pages")?.toString() || "";
-    const buffer = new Uint8Array(await file.arrayBuffer());
-    const result = await splitPdf(buffer, { mode, pages });
+    const upload = await readPdfBuffers(form, { min: 1, maxFiles: 1 });
+    if (!upload.ok) return jsonError(upload.error, upload.status);
+    const result = await splitPdf(upload.buffers[0], { mode, pages });
     return new NextResponse(Buffer.from(result.zip), {
       status: 200,
       headers: {

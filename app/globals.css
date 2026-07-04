@@ -2,15 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─────────────────────────────────────────────────────────────
+   Design tokens
+   ───────────────────────────────────────────────────────────── */
 :root {
-  --background: #f9fafb;
-  --foreground: #1f2937;
+  --background: #f6f7fb;
+  --foreground: #141b2d;
+  --glass: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-shadow: 0 1px 0 rgba(255, 255, 255, 0.7) inset,
+    0 18px 40px -18px rgba(20, 27, 45, 0.22), 0 6px 16px -10px rgba(20, 27, 45, 0.18);
+  --accent: #e5322d;
+  --accent-glow: rgba(229, 50, 45, 0.35);
   color-scheme: light;
 }
 
 html.dark {
-  --background: #0b1220;
-  --foreground: #f9fafb;
+  --background: #070b16;
+  --foreground: #eef2ff;
+  --glass: rgba(255, 255, 255, 0.045);
+  --glass-border: rgba(255, 255, 255, 0.09);
+  --glass-shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 24px 60px -22px rgba(0, 0, 0, 0.65), 0 8px 22px -12px rgba(0, 0, 0, 0.5);
+  --accent: #ff5a4d;
+  --accent-glow: rgba(255, 90, 77, 0.42);
   color-scheme: dark;
 }
 
@@ -20,6 +35,26 @@ body {
   color: var(--foreground);
 }
 
+/* Aurora background — soft layered radial glows that give depth without
+   a heavy image. Fixed so it never scrolls. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(60vw 60vw at 12% -8%, rgba(229, 50, 45, 0.14), transparent 60%),
+    radial-gradient(55vw 55vw at 110% 10%, rgba(99, 102, 241, 0.13), transparent 60%),
+    radial-gradient(70vw 70vw at 50% 120%, rgba(16, 185, 129, 0.1), transparent 60%);
+}
+html.dark body::before {
+  background:
+    radial-gradient(60vw 60vw at 12% -8%, rgba(255, 90, 77, 0.18), transparent 60%),
+    radial-gradient(55vw 55vw at 110% 10%, rgba(99, 102, 241, 0.18), transparent 60%),
+    radial-gradient(70vw 70vw at 50% 120%, rgba(16, 185, 129, 0.1), transparent 60%);
+}
+
 body {
   font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", sans-serif;
@@ -27,47 +62,170 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Big rounded primary button used on every tool page. */
-.btn-primary {
-  @apply inline-flex items-center justify-center gap-2 rounded-2xl bg-brand px-8 py-4 text-lg font-semibold text-white shadow-cta transition;
+/* ─────────────────────────────────────────────────────────────
+   App shell — single viewport, no page scroll
+   ───────────────────────────────────────────────────────────── */
+.app-shell {
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.app-main {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+.app-scroll {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+}
+.app-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.app-scroll::-webkit-scrollbar-thumb {
+  background: rgba(120, 130, 160, 0.35);
+  border-radius: 99px;
 }
 
-.btn-primary:hover {
-  @apply bg-brand-hover;
+/* ─────────────────────────────────────────────────────────────
+   Glass surfaces + depth
+   ───────────────────────────────────────────────────────────── */
+.glass {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
 }
 
-.btn-primary:disabled {
-  @apply cursor-not-allowed bg-gray-300 text-gray-500 shadow-none dark:bg-gray-700 dark:text-gray-400;
-}
-
-.btn-ghost {
-  @apply inline-flex items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-ink transition dark:border-gray-700 dark:bg-surface-dark dark:text-ink-dark;
-}
-
-.btn-ghost:hover {
-  @apply border-brand text-brand;
-}
-
-.input,
-.select,
-.textarea {
-  @apply w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-ink outline-none transition dark:border-gray-700 dark:bg-surface-dark dark:text-ink-dark;
-}
-
-.input:focus,
-.select:focus,
-.textarea:focus {
-  @apply border-brand ring-2 ring-brand/15;
+/* A flatter, lighter surface for nested panels. */
+.glass-soft {
+  background: color-mix(in oklab, var(--glass) 70%, transparent);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .card {
-  @apply rounded-2xl bg-white shadow-card dark:bg-surface-dark dark:shadow-none dark:ring-1 dark:ring-gray-800;
+  @apply rounded-2xl;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   3D tilt primitives
+   ───────────────────────────────────────────────────────────── */
+.tilt {
+  transform-style: preserve-3d;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+.tilt-hover:hover {
+  transform: perspective(1100px) rotateX(5deg) rotateY(-7deg) translateZ(8px);
+  box-shadow: 0 30px 60px -26px rgba(20, 27, 45, 0.4),
+    0 12px 28px -14px var(--accent-glow);
+}
+
+/* Layer that floats above the card to sell the 3D depth. */
+.tilt-floor {
+  transform: translateZ(40px);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Motion — view rise + flip, gated by reduced-motion
+   ───────────────────────────────────────────────────────────── */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes flip-in {
+  from { opacity: 0; transform: perspective(1200px) rotateX(-9deg) translateY(10px); }
+  to { opacity: 1; transform: perspective(1200px) rotateX(0) translateY(0); }
+}
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); }
+  50% { box-shadow: 0 0 0 14px transparent; }
+}
+.animate-rise { animation: rise 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.animate-flip-in { animation: flip-in 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.stagger > * { animation: rise 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.stagger > *:nth-child(1) { animation-delay: 0.04s; }
+.stagger > *:nth-child(2) { animation-delay: 0.08s; }
+.stagger > *:nth-child(3) { animation-delay: 0.12s; }
+.stagger > *:nth-child(4) { animation-delay: 0.16s; }
+.stagger > *:nth-child(5) { animation-delay: 0.20s; }
+.stagger > *:nth-child(6) { animation-delay: 0.24s; }
+.stagger > *:nth-child(7) { animation-delay: 0.28s; }
+.stagger > *:nth-child(8) { animation-delay: 0.32s; }
+.stagger > *:nth-child(n+9) { animation-delay: 0.36s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-rise, .animate-flip-in, .stagger > *, .tilt, .tilt-hover:hover {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Buttons / inputs
+   ───────────────────────────────────────────────────────────── */
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2 rounded-2xl px-7 py-3.5 text-base font-semibold text-white transition;
+  background: linear-gradient(180deg, var(--accent), color-mix(in oklab, var(--accent) 78%, #000 22%));
+  box-shadow: 0 10px 26px -10px var(--accent-glow), 0 1px 0 rgba(255, 255, 255, 0.25) inset;
+}
+.btn-primary:hover { filter: brightness(1.06); transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0); }
+.btn-primary:disabled {
+  @apply cursor-not-allowed shadow-none;
+  background: rgba(120, 130, 160, 0.35);
+  color: rgba(255, 255, 255, 0.8);
+  transform: none;
+  filter: none;
+}
+
+.btn-ghost {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  color: var(--foreground);
+  backdrop-filter: blur(10px);
+}
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+.input, .select, .textarea {
+  @apply w-full rounded-xl px-4 py-2.5 text-sm outline-none transition;
+  background: color-mix(in oklab, var(--glass) 85%, transparent);
+  border: 1px solid var(--glass-border);
+  color: var(--foreground);
+}
+.input::placeholder { color: color-mix(in oklab, var(--foreground) 45%, transparent); }
+.input:focus, .select:focus, .textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-glow);
 }
 
 .label {
-  @apply mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300;
+  @apply mb-1 block text-sm font-medium;
+  color: color-mix(in oklab, var(--foreground) 70%, transparent);
 }
 
 .kbd {
-  @apply rounded border border-gray-200 bg-gray-50 px-1.5 py-0.5 text-xs text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400;
+  @apply rounded px-1.5 py-0.5 text-xs;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  color: color-mix(in oklab, var(--foreground) 65%, transparent);
 }
+
+/* Range inputs pick up the accent color. */
+input[type="range"] { accent-color: var(--accent); }
+input[type="color"] { accent-color: var(--accent); }

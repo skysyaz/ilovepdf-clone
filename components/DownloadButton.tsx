@@ -25,7 +25,11 @@ export default function DownloadButton({
     <button
       type="button"
       onClick={handleClick}
-      className="btn-primary bg-green-600 shadow-[0_8px_24px_rgba(22,163,74,0.32)] hover:bg-green-700"
+      className="btn-primary"
+      style={{
+        background: "linear-gradient(180deg, #16a34a, #15803d)",
+        boxShadow: "0 10px 26px -10px rgba(22,163,74,0.5), 0 1px 0 rgba(255,255,255,0.25) inset",
+      }}
     >
       <svg
         aria-hidden
@@ -40,7 +44,7 @@ export default function DownloadButton({
         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
       </svg>
       {label}
-      <span className="ml-2 text-sm font-normal opacity-80">{filename}</span>
+      <span className="ml-1 text-xs font-normal opacity-80">{filename}</span>
     </button>
   );
 }

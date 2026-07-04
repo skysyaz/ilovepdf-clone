@@ -1,28 +1,20 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { organizePdf } from "@/lib/pdf-tools/organize";
+import { readPdfBuffers, jsonError } from "@/lib/validate";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
     const form = await req.formData();
-    const file = form.get("files");
-    if (!(file instanceof File)) {
-      return NextResponse.json(
-        { error: "A single PDF file is required." },
-        { status: 400 }
-      );
-    }
     const pageOrder = form.get("pageOrder")?.toString() || "";
     if (!pageOrder.trim()) {
-      return NextResponse.json(
-        { error: "A pageOrder is required. Example: 1,3,2,4" },
-        { status: 400 }
-      );
+      return jsonError("A pageOrder is required. Example: 1,3,2,4", 400);
     }
-    const buffer = new Uint8Array(await file.arrayBuffer());
-    const result = await organizePdf(buffer, { pageOrder });
+    const upload = await readPdfBuffers(form, { min: 1, maxFiles: 1 });
+    if (!upload.ok) return jsonError(upload.error, upload.status);
+    const result = await organizePdf(upload.buffers[0], { pageOrder });
     return new NextResponse(Buffer.from(result.bytes), {
       status: 200,
       headers: {

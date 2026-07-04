@@ -1,34 +1,25 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { rotatePdf, type RotateAngle } from "@/lib/pdf-tools/rotate";
+import { readPdfBuffers, jsonError } from "@/lib/validate";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
     const form = await req.formData();
-    const file = form.get("files");
-    if (!(file instanceof File)) {
-      return NextResponse.json(
-        { error: "A single PDF file is required." },
-        { status: 400 }
-      );
-    }
     const angleRaw = parseInt(form.get("angle")?.toString() || "90", 10);
     if (![90, 180, 270].includes(angleRaw)) {
-      return NextResponse.json(
-        { error: "angle must be 90, 180 or 270." },
-        { status: 400 }
-      );
+      return jsonError("angle must be 90, 180 or 270.", 400);
     }
-    const angle = angleRaw as RotateAngle;
-    const buffer = new Uint8Array(await file.arrayBuffer());
-    const result = await rotatePdf(buffer, angle);
+    const upload = await readPdfBuffers(form, { min: 1, maxFiles: 1 });
+    if (!upload.ok) return jsonError(upload.error, upload.status);
+    const result = await rotatePdf(upload.buffers[0], angleRaw as RotateAngle);
     return new NextResponse(Buffer.from(result.bytes), {
       status: 200,
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="rotated-${angle}.pdf"`,
+        "Content-Disposition": `attachment; filename="rotated-${angleRaw}.pdf"`,
         "Content-Length": String(result.bytes.byteLength),
         "X-Page-Count": String(result.pageCount),
       },

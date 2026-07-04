@@ -1,24 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { mergePdfs } from "@/lib/pdf-tools/merge";
+import { readPdfBuffers, jsonError } from "@/lib/validate";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
     const form = await req.formData();
-    const files = form.getAll("files").filter((f): f is File => f instanceof File);
-    if (files.length < 2) {
-      return NextResponse.json(
-        { error: "At least 2 PDF files are required to merge." },
-        { status: 400 }
-      );
-    }
-    const buffers: Uint8Array[] = [];
-    for (const f of files) {
-      buffers.push(new Uint8Array(await f.arrayBuffer()));
-    }
-    const result = await mergePdfs(buffers);
+    const upload = await readPdfBuffers(form, { min: 2, maxFiles: 20 });
+    if (!upload.ok) return jsonError(upload.error, upload.status);
+    const result = await mergePdfs(upload.buffers);
     return new NextResponse(Buffer.from(result.bytes), {
       status: 200,
       headers: {

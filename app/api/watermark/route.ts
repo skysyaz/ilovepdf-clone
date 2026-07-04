@@ -1,37 +1,25 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { watermarkPdf } from "@/lib/pdf-tools/watermark";
+import { readPdfBuffers, jsonError } from "@/lib/validate";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
     const form = await req.formData();
-    const file = form.get("files");
-    if (!(file instanceof File)) {
-      return NextResponse.json(
-        { error: "A single PDF file is required." },
-        { status: 400 }
-      );
-    }
     const text = form.get("text")?.toString() || "";
     if (!text.trim()) {
-      return NextResponse.json(
-        { error: "Watermark text is required." },
-        { status: 400 }
-      );
+      return jsonError("Watermark text is required.", 400);
     }
     const fontSize = parseInt(form.get("fontSize")?.toString() || "60", 10);
     const opacity = parseFloat(form.get("opacity")?.toString() || "0.3");
     const rotation = parseFloat(form.get("rotation")?.toString() || "45");
     const color = form.get("color")?.toString() || "#E5322D";
-    const buffer = new Uint8Array(await file.arrayBuffer());
-    const result = await watermarkPdf(buffer, {
-      text,
-      fontSize,
-      opacity,
-      rotation,
-      color,
+    const upload = await readPdfBuffers(form, { min: 1, maxFiles: 1 });
+    if (!upload.ok) return jsonError(upload.error, upload.status);
+    const result = await watermarkPdf(upload.buffers[0], {
+      text, fontSize, opacity, rotation, color,
     });
     return new NextResponse(Buffer.from(result.bytes), {
       status: 200,

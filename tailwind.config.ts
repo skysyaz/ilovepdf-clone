@@ -13,7 +13,7 @@ const config: Config = {
         brand: {
           DEFAULT: "#E5322D",
           hover: "#FF6B35",
-          dark: "#B8281F",
+          dark: "#FF5A4D",
         },
         ink: {
           DEFAULT: "#1F2937",

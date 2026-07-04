@@ -14,10 +14,17 @@ export interface WatermarkOptions {
 }
 
 function hexToRgb01(hex: string): { r: number; g: number; b: number } {
-  const m = /^#?([0-9a-fA-F]{6})$/.exec(hex.trim());
-  if (!m) return { r: 229 / 255, g: 50 / 255, b: 45 / 255 };
-  const v = parseInt(m[1], 16);
-  return { r: ((v >> 16) & 0xff) / 255, g: ((v >> 8) & 0xff) / 255, b: (v & 0xff) / 255 };
+  const h = hex.trim().replace(/^#/, "");
+  // Support #rgb and #rrggbb. Fall back to brand red on anything else.
+  if (/^[0-9a-fA-F]{6}$/.test(h)) {
+    const v = parseInt(h, 16);
+    return { r: ((v >> 16) & 0xff) / 255, g: ((v >> 8) & 0xff) / 255, b: (v & 0xff) / 255 };
+  }
+  if (/^[0-9a-fA-F]{3}$/.test(h)) {
+    const r = parseInt(h[0], 16), g = parseInt(h[1], 16), b = parseInt(h[2], 16);
+    return { r: ((r * 17) / 255), g: ((g * 17) / 255), b: ((b * 17) / 255) };
+  }
+  return { r: 229 / 255, g: 50 / 255, b: 45 / 255 };
 }
 
 export async function watermarkPdf(
@@ -29,7 +36,9 @@ export async function watermarkPdf(
   }
   const fontSize = Math.min(200, Math.max(8, options.fontSize ?? 60));
   const opacity = Math.min(1, Math.max(0, options.opacity ?? 0.3));
-  const rotation = options.rotation ?? 45;
+  // Clamp rotation to a sane range; pdf-lib accepts any number but a wild
+  // value just produces an odd-looking watermark.
+  const rotation = Math.min(360, Math.max(-360, options.rotation ?? 45));
   const color = hexToRgb01(options.color || "#E5322D");
 
   const doc = await PDFDocument.load(buffer, { ignoreEncryption: true });
